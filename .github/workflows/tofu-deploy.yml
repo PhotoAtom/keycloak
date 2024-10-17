@@ -68,6 +68,9 @@ jobs:
       deployment_name: Keycloak Secrets
       folder_path: secrets
       runners: photoatom
+      pre_plan_script: |
+        kubectl get secret -n postgres keycloak-pg-cert -o json | jq -rc '.data."tls.key"' | base64 -d > tls.key
+        openssl pkcs8 -topk8 -inform PEM -outform DER -in tls.key -out tls.pk8 -nocrypt
     secrets:
       KUBECONFIG: ${{ secrets.KUBECONFIG }}
 
