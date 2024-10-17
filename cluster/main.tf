@@ -12,16 +12,14 @@ resource "kubernetes_manifest" "keycloak" {
     }
     "spec" = {
       "db" = {
-        "database" = "keycloak"
-        "host"     = "${var.postgres_cluster_name}-rw.${var.postgres_namespace}.svc"
+        "url" = "jdbc:postgresql://${var.postgres_cluster_name}-rw.${var.postgres_namespace}.svc/keycloak?ssl=true&sslmode=verify-ca&sslrootcert=/mnt/cert/ca.crt&sslcert=/mnt/cert/tls.crt&sslkey=/mnt/key/tls.pk8"
         "passwordSecret" = {
           "key"  = "password"
           "name" = var.keycloak_database_credentials_name
         }
         "poolInitialSize" = 1
         "poolMaxSize"     = 3
-        "poolMinSize"     = 2
-        "port"            = 5432
+        "poolMinSize"     = 1
         "usernameSecret" = {
           "key"  = "username"
           "name" = var.keycloak_database_credentials_name
@@ -37,7 +35,7 @@ resource "kubernetes_manifest" "keycloak" {
       "ingress" = {
         "enabled" = false
       }
-      "instances" = 3
+      "instances" = 2
       "resources" = {
         "limits" = {
           "cpu"    = "500m"
@@ -55,6 +53,34 @@ resource "kubernetes_manifest" "keycloak" {
               "fsGroup"   = 1000
               "runAsUser" = 1000
             }
+            "containers" = [
+              {
+                "volumeMounts" = [
+                  {
+                    "name"      = "keycloak-postgres-certificates"
+                    "mountPath" = "/mnt/cert"
+                  },
+                  {
+                    "name"      = "keycloak-postgres-keys"
+                    "mountPath" = "/mnt/key"
+                  }
+                ]
+              }
+            ]
+            "volumes" = [
+              {
+                "name" = "keycloak-postgres-certificates"
+                "secret" = {
+                  "secretName" = "keycloak-postgresql-ssl-certificates"
+                }
+              },
+              {
+                "name" = "keycloak-postgres-keys"
+                "secret" = {
+                  "secretName" = "keycloak-postgresql-ssl-key"
+                }
+              }
+            ]
           }
         }
       }
