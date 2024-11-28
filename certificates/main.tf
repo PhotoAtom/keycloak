@@ -72,7 +72,16 @@ resource "kubernetes_manifest" "keycloak_certificate" {
     }
     "spec" = {
       "dnsNames" = [
-        "auth.photoatom.local"
+        "auth.photoatom.local",
+        "localhost",
+        "127.0.0.1",
+        "*.keycloak.svc.cluster.local",
+        "keycloak-cluster-service",
+        "keycloak-cluster-service.keycloak.svc.cluster.local",
+        "*.keycloak-cluster-service.keycloak.svc.cluster.local",
+        "keycloak-discovery-service",
+        "keycloak-discovery-service.keycloak.svc.cluster.local",
+        "*.keycloak-discovery-service.keycloak.svc.cluster.local",
       ]
       "subject" = {
         "organizations"       = ["photoatom"]
