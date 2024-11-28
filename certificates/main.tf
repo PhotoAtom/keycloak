@@ -79,9 +79,9 @@ resource "kubernetes_manifest" "keycloak_certificate" {
         "keycloak-cluster-service",
         "keycloak-cluster-service.keycloak.svc.cluster.local",
         "*.keycloak-cluster-service.keycloak.svc.cluster.local",
-        "keycloak-discovery-service",
-        "keycloak-discovery-service.keycloak.svc.cluster.local",
-        "*.keycloak-discovery-service.keycloak.svc.cluster.local",
+        "keycloak-cluster-discovery",
+        "keycloak-cluster-discovery.keycloak.svc.cluster.local",
+        "*.keycloak-cluster-discovery.keycloak.svc.cluster.local",
       ]
       "subject" = {
         "organizations"       = ["photoatom"]
