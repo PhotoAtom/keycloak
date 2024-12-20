@@ -27,7 +27,7 @@ resource "kubernetes_manifest" "keycloak" {
         "vendor" = "postgres"
       }
       "hostname" = {
-        "hostname" = var.host_name
+        "hostname" = "${var.host_name}.${var.photoatom_domain}"
       }
       "http" = {
         "tlsSecret" = "keycloak-tls"
@@ -97,11 +97,6 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
       component = "ingress"
     }
     annotations = {
-      "cert-manager.io/cluster-issuer" : "${var.cluster_issuer_name}"
-      "cert-manager.io/common-name" : "keycloak-ingress"
-      "cert-manager.io/subject-organizations" : "photoatom"
-      "cert-manager.io/subject-organizationalunits" : "keycloak"
-      "cert-manager.io/subject-countries" : "India"
       "nginx.ingress.kubernetes.io/proxy-ssl-verify" : "off"
       "nginx.ingress.kubernetes.io/backend-protocol" : "HTTPS"
       "nginx.ingress.kubernetes.io/rewrite-target" : "/"
@@ -112,11 +107,11 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
   spec {
     ingress_class_name = "nginx"
     tls {
-      hosts       = [var.host_name]
+      hosts       = ["${var.host_name}.${var.photoatom_domain}"]
       secret_name = "keycloak-ingress-tls"
     }
     rule {
-      host = var.host_name
+      host = "${var.host_name}.${var.photoatom_domain}"
       http {
         path {
           path = "/"
