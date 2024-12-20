@@ -46,42 +46,39 @@ jobs:
         # Sleep till operator is ready
         echo "Sleeping till the operator is ready"
         sleep 60
-    secrets:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-
-  certificates_deploy:
-    needs: [namespace_deploy]
-    name: Keycloak Certificates Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Certificates
-      folder_path: certificates
-      runners: photoatom
-    secrets:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-
-  secrets_deploy:
-    needs: [certificates_deploy]
-    name: Keycloak Secrets Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Secrets
-      folder_path: secrets
-      runners: photoatom
-      pre_plan_script: |
-        kubectl get secret -n postgres keycloak-pg-cert -o json | jq -rc '.data."tls.key"' | base64 -d > tls.key
-        openssl pkcs8 -topk8 -inform PEM -outform DER -in tls.key -out tls.pk8 -nocrypt
-    secrets:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-
-  cluster_deploy:
-    needs: [secrets_deploy]
-    name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Cluster
-      folder_path: cluster
-      runners: photoatom
-    secrets:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-
+    secrets: inherit
+      
+  # certificates_deploy:
+  #   needs: [namespace_deploy]
+  #   name: Keycloak Certificates Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Certificates
+  #     folder_path: certificates
+  #     runners: photoatom
+  #   secrets: inherit
+  #     
+  # secrets_deploy:
+  #   needs: [certificates_deploy]
+  #   name: Keycloak Secrets Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Secrets
+  #     folder_path: secrets
+  #     runners: photoatom
+  #     pre_plan_script: |
+  #       kubectl get secret -n postgres keycloak-pg-cert -o json | jq -rc '.data."tls.key"' | base64 -d > tls.key
+  #       openssl pkcs8 -topk8 -inform PEM -outform DER -in tls.key -out tls.pk8 -nocrypt
+  #   secrets: inherit
+  #     
+  # cluster_deploy:
+  #   needs: [secrets_deploy]
+  #   name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Cluster
+  #     folder_path: cluster
+  #     runners: photoatom
+  #   secrets: inherit
+  #     
+  #
