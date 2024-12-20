@@ -1,16 +1,12 @@
 terraform {
   required_providers {
     kubernetes = {
-      source  = "opentofu/kubernetes"
-      version = "2.32.0"
-    }
-    null = {
-      source  = "opentofu/null"
-      version = "3.2.2"
+      source  = "hashicorp/kubernetes"
+      version = "2.35.0"
     }
     random = {
-      source  = "opentofu/random"
-      version = "3.6.2"
+      source  = "hashicorp/random"
+      version = "3.6.3"
     }
   }
 
