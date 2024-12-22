@@ -97,7 +97,9 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
       component = "ingress"
     }
     annotations = {
-      "nginx.ingress.kubernetes.io/proxy-ssl-verify" : "off"
+      "nginx.ingress.kubernetes.io/proxy-ssl-verify" : "on"
+      "nginx.ingress.kubernetes.io/proxy-ssl-secret" : "keycloak/keycloak-tls"
+      "nginx.ingress.kubernetes.io/proxy-ssl-name" : "keycloak-cluster-service.keycloak.svc.cluster.local"
       "nginx.ingress.kubernetes.io/backend-protocol" : "HTTPS"
       "nginx.ingress.kubernetes.io/rewrite-target" : "/"
       "nginx.ingress.kubernetes.io/proxy-body-size" : 0
