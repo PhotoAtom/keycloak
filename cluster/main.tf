@@ -55,7 +55,7 @@ resource "kubernetes_manifest" "keycloak" {
             }
             "containers" = [
               {
-                "args" : ["-Djgroups.dns.query=keycloak-cluster-discovery.keycloak", "--verbose", "start", "--import-realm"]
+                "args" : ["--verbose", "start", "--import-realm"]
                 "volumeMounts" = [
                   {
                     "name"      = "keycloak-postgres-certificates"
