@@ -19,10 +19,6 @@ provider "kubernetes" {
 
 }
 
-provider "null" {
-
-}
-
 provider "random" {
 
 }
