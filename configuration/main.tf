@@ -8,6 +8,6 @@ resource "kubernetes_config_map" "realm_configuration" {
   }
 
   data = {
-    "realm.json" = "${file("${path.module / photoatom.json}")}"
+    "realm.json" = "${file("${path.module}/photoatom.json")}"
   }
 }
