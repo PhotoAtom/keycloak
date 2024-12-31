@@ -15,6 +15,3 @@ provider "kubernetes" {
 
 }
 
-provider "null" {
-
-}
