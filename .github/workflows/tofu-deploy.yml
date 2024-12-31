@@ -62,7 +62,17 @@ jobs:
         echo "Waiting for Keycloak Ingress Certificate to be ready"
         kubectl wait --for=condition=Ready=true certificate/keycloak-ingress-certificate -n keycloak --timeout=300s
     secrets: inherit
-      
+  
+  configuration_deploy:
+    needs: [certificates_deploy]
+    name: Keycloak Configuration Deployment onto Self Hosted K3d Cluster
+    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+    with:
+      deployment_name: Keycloak Configuration
+      folder_path: configuration
+      runners: photoatom
+    secrets: inherit
+       
   secrets_deploy:
     needs: [certificates_deploy]
     name: Keycloak Secrets Deployment onto Self Hosted K3d Cluster
@@ -76,14 +86,12 @@ jobs:
         openssl pkcs8 -topk8 -inform PEM -outform DER -in tls.key -out tls.pk8 -nocrypt
     secrets: inherit
       
-  cluster_deploy:
-    needs: [secrets_deploy]
-    name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Cluster
-      folder_path: cluster
-      runners: photoatom
-    secrets: inherit
-      
-
+  # cluster_deploy:
+  #   needs: [secrets_deploy]
+  #   name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Cluster
+  #     folder_path: cluster
+  #     runners: photoatom
+  #   secrets: inherit
