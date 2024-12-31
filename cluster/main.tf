@@ -35,7 +35,7 @@ resource "kubernetes_manifest" "keycloak" {
       "ingress" = {
         "enabled" = false
       }
-      "instances" = 2
+      "instances" = 1
       "resources" = {
         "limits" = {
           "cpu"    = "500m"
@@ -55,6 +55,7 @@ resource "kubernetes_manifest" "keycloak" {
             }
             "containers" = [
               {
+                "args" : ["--verbose", "start", "--import-realm"]
                 "volumeMounts" = [
                   {
                     "name"      = "keycloak-postgres-certificates"
@@ -63,6 +64,17 @@ resource "kubernetes_manifest" "keycloak" {
                   {
                     "name"      = "keycloak-postgres-keys"
                     "mountPath" = "/mnt/key"
+                  },
+                  {
+                    "name"      = "photoatom-realm-configuration"
+                    "mountPath" = "/opt/keycloak/data/import"
+                  }
+                ]
+                "envFrom" = [
+                  {
+                    "secretRef" = {
+                      "name" : "photoatom-client-secrets"
+                    }
                   }
                 ]
               }
@@ -78,6 +90,12 @@ resource "kubernetes_manifest" "keycloak" {
                 "name" = "keycloak-postgres-keys"
                 "secret" = {
                   "secretName" = "keycloak-postgresql-ssl-key"
+                }
+              },
+              {
+                "name" = "photoatom-realm-configuration"
+                "configMap" = {
+                  "name" = "photoatom-realm-configuration"
                 }
               }
             ]

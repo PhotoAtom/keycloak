@@ -1,3 +1,4 @@
+
 terraform {
   required_providers {
     kubernetes = {
@@ -7,7 +8,7 @@ terraform {
   }
 
   backend "kubernetes" {
-    secret_suffix = "cluster.keycloak"
+    secret_suffix = "configuration.keycloak"
   }
 }
 

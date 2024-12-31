@@ -74,3 +74,41 @@ resource "kubernetes_secret" "keycloak_database_ssl_key" {
 
   type = "Opaque"
 }
+
+// PhotoAtom Realm Secrets
+resource "random_password" "tester_client_secret" {
+  length           = 16
+  lower            = true
+  numeric          = true
+  special          = true
+  override_special = "-_*"
+  min_special      = 2
+}
+
+resource "random_password" "frontend_client_secret" {
+  length           = 16
+  lower            = true
+  numeric          = true
+  special          = true
+  override_special = "-_*"
+  min_special      = 2
+}
+
+resource "kubernetes_secret" "photoatom_client_secrets" {
+  metadata {
+    name      = "photoatom-client-secrets"
+    namespace = var.namespace
+    labels = {
+      app       = "keycloak"
+      component = "secret"
+    }
+  }
+
+  data = {
+    "PHOTOATOM_FRONTEND_CLIENT_SECRET" = base64encode(random_password.frontend_client_secret.result)
+    "PHOTOATOM_TESTER_CLIENT_SECRET"   = base64encode(random_password.tester_client_secret.result)
+  }
+
+  type = "Opaque"
+}
+
