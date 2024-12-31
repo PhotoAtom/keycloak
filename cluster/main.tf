@@ -95,7 +95,7 @@ resource "kubernetes_manifest" "keycloak" {
               {
                 "name" = "photoatom-realm-configuration"
                 "configMap" = {
-                  "configMapName" = "photoatom-realm-configuration"
+                  "name" = "photoatom-realm-configuration"
                 }
               }
             ]
