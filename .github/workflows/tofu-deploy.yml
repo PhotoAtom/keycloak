@@ -89,7 +89,7 @@ jobs:
     secrets: inherit
       
   cluster_deploy:
-    needs: [secrets_deploy]
+    needs: [secrets_deploy, configuration_deploy]
     name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
     uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
     with:

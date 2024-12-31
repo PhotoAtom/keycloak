@@ -72,7 +72,9 @@ resource "kubernetes_manifest" "keycloak" {
                 ]
                 "envFrom" = [
                   {
-                    "secretRef" = "photoatom-client-secrets"
+                    "secretRef" = {
+                      "name" : "photoatom-client-secrets"
+                    }
                   }
                 ]
               }
