@@ -88,12 +88,12 @@ jobs:
         openssl pkcs8 -topk8 -inform PEM -outform DER -in tls.key -out tls.pk8 -nocrypt
     secrets: inherit
       
-  # cluster_deploy:
-  #   needs: [secrets_deploy]
-  #   name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
-  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-  #   with:
-  #     deployment_name: Keycloak Cluster
-  #     folder_path: cluster
-  #     runners: photoatom
-  #   secrets: inherit
+  cluster_deploy:
+    needs: [secrets_deploy]
+    name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
+    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+    with:
+      deployment_name: Keycloak Cluster
+      folder_path: cluster
+      runners: photoatom
+    secrets: inherit
