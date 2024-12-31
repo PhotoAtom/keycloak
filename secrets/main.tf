@@ -96,7 +96,12 @@ resource "random_password" "frontend_client_secret" {
 
 resource "kubernetes_secret" "photoatom_client_secrets" {
   metadata {
-    name = "photoatom-client-secrets"
+    name      = "photoatom-client-secrets"
+    namespace = var.namespace
+    labels = {
+      app       = "keycloak"
+      component = "secret"
+    }
   }
 
   data = {
