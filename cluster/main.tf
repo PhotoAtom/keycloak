@@ -35,7 +35,7 @@ resource "kubernetes_manifest" "keycloak" {
       "ingress" = {
         "enabled" = false
       }
-      "instances" = 2
+      "instances" = 1
       "resources" = {
         "limits" = {
           "cpu"    = "500m"
