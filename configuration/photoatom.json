@@ -733,7 +733,9 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "${PHOTOATOM_FRONTEND_CLIENT_SECRET}",
       "redirectUris": [
-        "/*"
+        "http://localhost:3000/login/keycloak/callback",
+        "http://localhost:5173/login/keycloak/callback",
+        "https://photoatom.khatrivarun.xyz/login/keycloak/callback"
       ],
       "webOrigins": [
         "/*"
@@ -753,6 +755,8 @@
         "oidc.ciba.grant.enabled": "false",
         "client.secret.creation.time": "1735543006",
         "backchannel.logout.session.required": "true",
+        "post.logout.redirect.uris": "https://localhost:3000/login/keycloak/callback##https://localhost:5173/login/keycloak/callback##https://photoatom.khatrivarun.xyz/login/keycloak/callback",
+        "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
