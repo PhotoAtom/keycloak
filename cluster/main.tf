@@ -409,5 +409,5 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
     }
   }
 
-  depends_on = [kubernetes_manifest.keycloak]
+  depends_on = [kubernetes_stateful_set.keycloak_cluster]
 }
