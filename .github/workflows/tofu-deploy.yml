@@ -36,7 +36,7 @@ jobs:
       deployment_name: Keycloak Namespace
       folder_path: namespace
       runners: photoatom
-      secrets: inherit
+    secrets: inherit
       
   certificates_deploy:
     needs: [namespace_deploy]
