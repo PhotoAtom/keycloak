@@ -64,7 +64,7 @@ resource "kubernetes_stateful_set" "keycloak_cluster" {
     }
   }
   spec {
-    replicas     = 2
+    replicas     = 1
     service_name = ""
 
     // Stateful Set Pod Selector
@@ -258,114 +258,6 @@ resource "kubernetes_stateful_set" "keycloak_cluster" {
 
   depends_on = [kubernetes_service.keycloak_service, kubernetes_service.keycloak_discovery]
 }
-
-# resource "kubernetes_manifest" "keycloak" {
-#   manifest = {
-#     "apiVersion" = "k8s.keycloak.org/v2alpha1"
-#     "kind"       = "Keycloak"
-#     "metadata" = {
-#       "labels" = {
-#         "app"       = "keycloak"
-#         "component" = "cluster"
-#       }
-#       "name"      = var.cluster_name
-#       "namespace" = var.namespace
-#     }
-#     "spec" = {
-#       "db" = {
-#         "url" = "jdbc:postgresql://${var.postgres_cluster_name}-rw.${var.postgres_namespace}.svc/keycloak?ssl=true&sslmode=verify-ca&sslrootcert=/mnt/cert/ca.crt&sslcert=/mnt/cert/tls.crt&sslkey=/mnt/key/tls.pk8"
-#         "passwordSecret" = {
-#           "key"  = "password"
-#           "name" = var.keycloak_database_credentials_name
-#         }
-#         "poolInitialSize" = 1
-#         "poolMaxSize"     = 3
-#         "poolMinSize"     = 1
-#         "usernameSecret" = {
-#           "key"  = "username"
-#           "name" = var.keycloak_database_credentials_name
-#         }
-#         "vendor" = "postgres"
-#       }
-#       "hostname" = {
-#         "hostname" = "${var.host_name}.${var.photoatom_domain}"
-#       }
-#       "http" = {
-#         "tlsSecret" = "keycloak-tls"
-#       }
-#       "ingress" = {
-#         "enabled" = false
-#       }
-#       "instances" = 1
-#       "resources" = {
-#         "limits" = {
-#           "cpu"    = "500m"
-#           "memory" = "1Gi"
-#         }
-#         "requests" = {
-#           "cpu"    = "500m"
-#           "memory" = "1Gi"
-#         }
-#       }
-#       "unsupported" = {
-#         "podTemplate" = {
-#           "spec" = {
-#             "securityContext" = {
-#               "fsGroup"   = 1000
-#               "runAsUser" = 1000
-#             }
-#             "containers" = [
-#               {
-#                 "args" : ["--verbose", "start", "--import-realm"]
-#                 "volumeMounts" = [
-#                   {
-#                     "name"      = "keycloak-postgres-certificates"
-#                     "mountPath" = "/mnt/cert"
-#                   },
-#                   {
-#                     "name"      = "keycloak-postgres-keys"
-#                     "mountPath" = "/mnt/key"
-#                   },
-#                   {
-#                     "name"      = "photoatom-realm-configuration"
-#                     "mountPath" = "/opt/keycloak/data/import"
-#                   }
-#                 ]
-#                 "envFrom" = [
-#                   {
-#                     "secretRef" = {
-#                       "name" : "photoatom-client-secrets"
-#                     }
-#                   }
-#                 ]
-#               }
-#             ]
-#             "volumes" = [
-#               {
-#                 "name" = "keycloak-postgres-certificates"
-#                 "secret" = {
-#                   "secretName" = "keycloak-postgresql-ssl-certificates"
-#                 }
-#               },
-#               {
-#                 "name" = "keycloak-postgres-keys"
-#                 "secret" = {
-#                   "secretName" = "keycloak-postgresql-ssl-key"
-#                 }
-#               },
-#               {
-#                 "name" = "photoatom-realm-configuration"
-#                 "configMap" = {
-#                   "name" = "photoatom-realm-configuration"
-#                 }
-#               }
-#             ]
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
 
 resource "kubernetes_ingress_v1" "keycloak_ingress" {
   metadata {
