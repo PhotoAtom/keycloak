@@ -119,7 +119,7 @@ resource "kubernetes_stateful_set" "keycloak_cluster" {
 
           env_from {
             secret_ref {
-              name = "keycloak-client-secrets"
+              name = "photoatom-client-secrets"
             }
           }
 
