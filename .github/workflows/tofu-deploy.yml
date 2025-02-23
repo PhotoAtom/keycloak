@@ -73,12 +73,12 @@ jobs:
       runners: photoatom
     secrets: inherit
       
-  # cluster_deploy:
-  #   needs: [secrets_deploy, configuration_deploy]
-  #   name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
-  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-  #   with:
-  #     deployment_name: Keycloak Cluster
-  #     folder_path: cluster
-  #     runners: photoatom
-  #   secrets: inherit
+  cluster_deploy:
+    needs: [secrets_deploy, configuration_deploy]
+    name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
+    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+    with:
+      deployment_name: Keycloak Cluster
+      folder_path: cluster
+      runners: photoatom
+    secrets: inherit

@@ -59,7 +59,7 @@ variable "keycloak_environment_variables" {
     },
     {
       name  = "KC_DB_URL"
-      value = "jdbc:postgresql://postgresql-cluster-rw.postgres.svc/keycloak?ssl=true&sslmode=verify-ca&sslrootcert=/mnt/certs/database/ca.crt&sslcert=/mnt/certs/database/tls.crt&sslkey=/mnt/certs/database/key/tls.pk8"
+      value = "jdbc:postgresql://postgresql-cluster-rw.postgres.svc/keycloak?ssl=true&sslmode=verify-full&sslrootcert=/mnt/certs/database/ca/ca.crt&sslcert=/mnt/certs/database/tls.crt&sslkey=/mnt/certs/database/key.der"
     },
     {
       name  = "KC_DB_POOL_INITIAL_SIZE"
@@ -135,13 +135,13 @@ variable "keycloak_volumes" {
     },
 
     {
-      name       = "keycloak-postgresql-ssl-certificates"
-      secretName = "keycloak-postgresql-ssl-certificates"
+      name       = "keycloak-pg-tls"
+      secretName = "keycloak-pg-tls"
     },
 
     {
-      name       = "keycloak-postgresql-ssl-key"
-      secretName = "keycloak-postgresql-ssl-key"
+      name       = "postgres-server-ca-tls"
+      secretName = "postgres-server-ca-tls"
     }
 
   ]
@@ -158,13 +158,13 @@ variable "keycloak_volume_mounts" {
     },
 
     {
-      name      = "keycloak-postgresql-ssl-certificates"
+      name      = "keycloak-pg-tls"
       mountPath = "/mnt/certs/database"
     },
 
     {
-      name      = "keycloak-postgresql-ssl-key"
-      mountPath = "/mnt/certs/database/key"
+      name      = "postgres-server-ca-tls"
+      mountPath = "/mnt/certs/database/ca"
     },
 
     {
