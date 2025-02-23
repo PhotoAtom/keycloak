@@ -19,7 +19,7 @@ resource "kubernetes_secret" "keycloak_database_credentials" {
   }
 
   lifecycle {
-    ignore_changes = [annotations, data]
+    ignore_changes = [metadata.annotations, data]
   }
 
   type = "kubernetes.io/basic-auth"
@@ -48,7 +48,7 @@ resource "kubernetes_secret" "keycloak_database_certificates" {
   }
 
   lifecycle {
-    ignore_changes = [annotations, data]
+    ignore_changes = [metadata.annotations, data]
   }
 
   type = "kubernetes.io/tls"
@@ -77,7 +77,7 @@ resource "kubernetes_secret" "database_ca_certificates" {
   }
 
   lifecycle {
-    ignore_changes = [annotations, data]
+    ignore_changes = [metadata.annotations, data]
   }
 
   type = "kubernetes.io/tls"
