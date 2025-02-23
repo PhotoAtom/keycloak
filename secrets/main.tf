@@ -1,10 +1,3 @@
-data "kubernetes_secret" "keycloak_database_credentials" {
-  metadata {
-    name      = var.keycloak_database_credentials_name
-    namespace = var.postgres_namespace
-  }
-}
-
 resource "kubernetes_secret" "keycloak_database_credentials" {
   metadata {
     name      = var.keycloak_database_credentials_name
@@ -14,31 +7,25 @@ resource "kubernetes_secret" "keycloak_database_credentials" {
       app       = "keycloak"
       component = "secret"
     }
+
+    annotations = {
+      "replicator.v1.mittwald.de/replicate-from" = "${var.postgres_namespace}/${var.keycloak_database_credentials_name}"
+    }
   }
 
   data = {
-    "username" = data.kubernetes_secret.keycloak_database_credentials.data["username"]
-    "password" = data.kubernetes_secret.keycloak_database_credentials.data["password"]
+    "username" = ""
+    "password" = ""
+  }
+
+  lifecycle {
+    ignore_changes = [metadata[0].annotations, data]
   }
 
   type = "kubernetes.io/basic-auth"
 }
 
-data "kubernetes_secret" "database_certificate_authority" {
-  metadata {
-    name      = var.database_certificate_authority_name
-    namespace = var.postgres_namespace
-  }
-}
-
-data "kubernetes_secret" "database_ssl_certificates" {
-  metadata {
-    name      = var.database_ssl_certificates_name
-    namespace = var.postgres_namespace
-  }
-}
-
-resource "kubernetes_secret" "keycloak_database_ssl_certificates" {
+resource "kubernetes_secret" "keycloak_database_certificates" {
   metadata {
     name      = var.keycloak_database_ssl_certificates_name
     namespace = var.namespace
@@ -47,32 +34,53 @@ resource "kubernetes_secret" "keycloak_database_ssl_certificates" {
       app       = "keycloak"
       component = "secret"
     }
+
+    annotations = {
+      "replicator.v1.mittwald.de/replicate-from" = "${var.postgres_namespace}/${var.keycloak_database_ssl_certificates_name}"
+    }
   }
 
   data = {
-    "ca.crt"  = data.kubernetes_secret.database_certificate_authority.data["ca.crt"]
-    "tls.crt" = data.kubernetes_secret.database_ssl_certificates.data["tls.crt"]
+    "ca.crt"  = ""
+    "tls.crt" = ""
+    "tls.key" = ""
+    "key.der" = ""
   }
 
-  type = "Opaque"
+  lifecycle {
+    ignore_changes = [metadata[0].annotations, data]
+  }
+
+  type = "kubernetes.io/tls"
 }
 
-resource "kubernetes_secret" "keycloak_database_ssl_key" {
+
+resource "kubernetes_secret" "database_ca_certificates" {
   metadata {
-    name      = var.keycloak_database_ssl_key_name
+    name      = var.database_certificate_authority_name
     namespace = var.namespace
 
     labels = {
       app       = "keycloak"
       component = "secret"
     }
+
+    annotations = {
+      "replicator.v1.mittwald.de/replicate-from" = "${var.postgres_namespace}/${var.database_certificate_authority_name}"
+    }
   }
 
-  binary_data = {
-    "tls.pk8" = "${filebase64("${path.module}/tls.pk8")}"
+  data = {
+    "ca.crt"  = ""
+    "tls.crt" = ""
+    "tls.key" = ""
   }
 
-  type = "Opaque"
+  lifecycle {
+    ignore_changes = [metadata[0].annotations, data]
+  }
+
+  type = "kubernetes.io/tls"
 }
 
 // Keycloak Credentials

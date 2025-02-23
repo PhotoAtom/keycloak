@@ -14,21 +14,11 @@ variable "keycloak_database_credentials_name" {
 }
 
 variable "database_certificate_authority_name" {
-  default     = "postgresql-cluster-ca"
+  default     = "postgresql-server-ca-tls"
   description = "PostgreSQL Database Certificate Authority Details"
 }
 
-variable "database_ssl_certificates_name" {
-  default     = "keycloak-pg-cert"
-  description = "PostgreSQL Database SSL Certificate Details for Keycloak"
-}
-
 variable "keycloak_database_ssl_certificates_name" {
-  default = "keycloak-postgresql-ssl-certificates"
+  default     = "keycloak-pg-tls"
   description = "PostgreSQL Database SSL Certificate Details for Keycloak"
-}
-
-variable "keycloak_database_ssl_key_name" {
-  default = "keycloak-postgresql-ssl-key"
-  description = "PostgreSQL Database SSL Key Details for Keycloak"
 }
