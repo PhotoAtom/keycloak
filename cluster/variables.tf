@@ -163,7 +163,7 @@ variable "keycloak_volume_mounts" {
     },
 
     {
-      name      = "postgres-server-ca-tls"
+      name      = "postgresql-server-ca-tls"
       mountPath = "/mnt/certs/database/ca"
     },
 
