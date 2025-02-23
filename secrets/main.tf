@@ -18,6 +18,10 @@ resource "kubernetes_secret" "keycloak_database_credentials" {
     "password" = ""
   }
 
+  lifecycle {
+    ignore_changes = [annotations, data]
+  }
+
   type = "kubernetes.io/basic-auth"
 }
 
@@ -43,6 +47,10 @@ resource "kubernetes_secret" "keycloak_database_certificates" {
     "key.der" = ""
   }
 
+  lifecycle {
+    ignore_changes = [annotations, data]
+  }
+
   type = "kubernetes.io/tls"
 }
 
@@ -66,6 +74,10 @@ resource "kubernetes_secret" "database_ca_certificates" {
     "ca.crt"  = ""
     "tls.crt" = ""
     "tls.key" = ""
+  }
+
+  lifecycle {
+    ignore_changes = [annotations, data]
   }
 
   type = "kubernetes.io/tls"
