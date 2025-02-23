@@ -29,52 +29,52 @@ on:
       - closed
 
 jobs:
-  namespace_deploy:
-    name: Keycloak Namespace Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Namespace
-      folder_path: namespace
-      runners: photoatom
-    secrets: inherit
+  # namespace_deploy:
+  #   name: Keycloak Namespace Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Namespace
+  #     folder_path: namespace
+  #     runners: photoatom
+  #   secrets: inherit
       
-  certificates_deploy:
-    needs: [namespace_deploy]
-    name: Keycloak Certificates Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Certificates
-      folder_path: certificates
-      runners: photoatom
-      post_apply_script: |
+  # certificates_deploy:
+  #   needs: [namespace_deploy]
+  #   name: Keycloak Certificates Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Certificates
+  #     folder_path: certificates
+  #     runners: photoatom
+  #     post_apply_script: |
 
-        # Wait for Keycloak Ingress Certificate to be ready
-        echo "Waiting for Keycloak Ingress Certificate to be ready"
-        kubectl wait --for=condition=Ready=true certificate/keycloak-ingress-certificate -n keycloak --timeout=300s
-    secrets: inherit
+  #       # Wait for Keycloak Ingress Certificate to be ready
+  #       echo "Waiting for Keycloak Ingress Certificate to be ready"
+  #       kubectl wait --for=condition=Ready=true certificate/keycloak-ingress-certificate -n keycloak --timeout=300s
+  #   secrets: inherit
   
-  configuration_deploy:
-    needs: [certificates_deploy]
-    name: Keycloak Configuration Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Configuration
-      folder_path: configuration
-      runners: photoatom
-    secrets: inherit
+  # configuration_deploy:
+  #   needs: [certificates_deploy]
+  #   name: Keycloak Configuration Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Configuration
+  #     folder_path: configuration
+  #     runners: photoatom
+  #   secrets: inherit
        
-  secrets_deploy:
-    needs: [certificates_deploy]
-    name: Keycloak Secrets Deployment onto Self Hosted K3d Cluster
-    uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
-    with:
-      deployment_name: Keycloak Secrets
-      folder_path: secrets
-      runners: photoatom
-    secrets: inherit
+  # secrets_deploy:
+  #   needs: [certificates_deploy]
+  #   name: Keycloak Secrets Deployment onto Self Hosted K3d Cluster
+  #   uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
+  #   with:
+  #     deployment_name: Keycloak Secrets
+  #     folder_path: secrets
+  #     runners: photoatom
+  #   secrets: inherit
       
   cluster_deploy:
-    needs: [secrets_deploy, configuration_deploy]
+    # needs: [secrets_deploy, configuration_deploy]
     name: Keycloak Cluster Deployment onto Self Hosted K3d Cluster
     uses: PhotoAtom/automations/.github/workflows/tofu-deploy.yml@main
     with:

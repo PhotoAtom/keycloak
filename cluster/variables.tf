@@ -140,8 +140,8 @@ variable "keycloak_volumes" {
     },
 
     {
-      name       = "postgres-server-ca-tls"
-      secretName = "postgres-server-ca-tls"
+      name       = "postgresql-server-ca-tls"
+      secretName = "postgresql-server-ca-tls"
     }
 
   ]
